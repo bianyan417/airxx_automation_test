@@ -1,0 +1,81 @@
+{
+  "validLogin": {
+    "email": "testuser@example.com",
+    "password": "TestPassword123!",
+    "expectedResult": "success"
+  },
+  "invalidPassword": {
+    "email": "testuser@example.com",
+    "password": "WrongPassword123",
+    "expectedResult": "error",
+    "expectedMessage": "Invalid email or password"
+  },
+  "invalidEmail": {
+    "email": "invalid-email-format",
+    "password": "TestPassword123!",
+    "expectedResult": "error",
+    "expectedMessage": "Please enter a valid email address"
+  },
+  "emptyCredentials": {
+    "email": "",
+    "password": "",
+    "expectedResult": "error",
+    "expectedMessage": "Email and password are required"
+  },
+  "nonExistentUser": {
+    "email": "nonexistent@example.com",
+    "password": "TestPassword123!",
+    "expectedResult": "error",
+    "expectedMessage": "Account not found"
+  },
+  "newUserRegistration": {
+    "email": "newuser_${timestamp}@example.com",
+    "password": "NewUserPassword123!",
+    "firstName": "Test",
+    "lastName": "User",
+    "expectedResult": "success"
+  },
+  "loyaltyPointsLogin": {
+    "loyaltyPointsNumber": "123456789",
+    "pin": "1234",
+    "expectedResult": "success"
+  },
+  "socialLogin": {
+    "provider": "google",
+    "expectedRedirect": "/oauth/callback"
+  },
+  "specialCharPassword": {
+    "email": "testuser@example.com",
+    "password": "P@$$w0rd!#%&*()_+",
+    "expectedResult": "depends"
+  },
+  "sqlInjection": {
+    "email": "test@example.com' OR '1'='1",
+    "password": "password' OR '1'='1",
+    "expectedResult": "error",
+    "description": "SQL injection attempt - should be blocked"
+  },
+  "xssAttempt": {
+    "email": "<script>alert('XSS')</script>",
+    "password": "<img src=x onerror=alert('XSS')>",
+    "expectedResult": "error",
+    "description": "XSS attempt - should be sanitized"
+  },
+  "longCredentials": {
+    "email": "verylongemailaddressthatexceedsnormallimitsforvalidation@verylongdomainname.example.com",
+    "password": "AverylongpasswordthatexceedsthenormalmaximumlengthallowedbytheapplicationvalidationAverylongpassword",
+    "expectedResult": "error"
+  },
+  "lockedAccount": {
+    "email": "lockeduser@example.com",
+    "password": "TestPassword123!",
+    "expectedResult": "error",
+    "expectedMessage": "Account is locked"
+  },
+  "expiredPassword": {
+    "email": "expiredpassword@example.com",
+    "password": "OldPassword123!",
+    "expectedResult": "redirect",
+    "expectedRedirect": "/change-password"
+  }
+}

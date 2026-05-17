@@ -1,13 +1,6 @@
-# Air New Zealand — Automation Test Framework
+# XXX Air Company — Automation Test Framework
 
-[![Java](https://img.shields.io/badge/java-17-blue.svg)](https://openjdk.org/projects/jdk/17/)
-[![Selenium](https://img.shields.io/badge/selenium-4.18.1-green.svg)](https://www.selenium.dev/)
-[![TestNG](https://img.shields.io/badge/testng-7.9.0-orange.svg)](https://testng.org/)
-[![Cucumber](https://img.shields.io/badge/cucumber-7.15.0-brightgreen.svg)](https://cucumber.io/)
-[![RestAssured](https://img.shields.io/badge/restassured-5.4.0-yellow.svg)](https://rest-assured.io/)
-[![Allure](https://img.shields.io/badge/allure-2.25.0-blueviolet.svg)](https://allurereport.org/)
-
-A professional, scalable, and maintainable test automation framework for the Air New Zealand web application.  
+A professional, scalable, and maintainable test automation framework for the XXX Air Company web application.  
 Supports **UI** (Selenium + TestNG), **API** (RestAssured), and **BDD** (Cucumber 7) testing in one unified Maven project.
 
 ## 📋 Table of Contents
@@ -76,8 +69,8 @@ Supports **UI** (Selenium + TestNG), **API** (RestAssured), and **BDD** (Cucumbe
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/airnz/automation-test.git
-cd automation-test
+git clone https://github.com/bianyan417/airxx_automation_test.git
+cd airxx_automation_test
 ```
 
 ### 2. Install Dependencies
@@ -128,7 +121,7 @@ airnz_automation_test/
 │           │   ├── HomePage.java              # Flight search widget, navigation, login CTA
 │           │   ├── BookingPage.java           # Flight results, fare selection, filters/sort
 │           │   ├── TicketPage.java            # Passenger form, seat map, extras, totals
-│           │   └── LoginPage.java             # Email/password form, Airpoints login,
+│           │   └── LoginPage.java             # Email/password form, LoyaltyPoints login,
 │           │                                  #   forgot-password, register, social login
 │           │
 │           ├── api/                           # API testing layer
@@ -163,7 +156,7 @@ airnz_automation_test/
 │           │   │   ├── BookingTest.java       # 14 UI tests: search, fare selection,
 │           │   │   │                          #   multi-passenger, seat, validation, promo
 │           │   │   └── LoginTest.java         # 20 UI tests: valid/invalid login, register,
-│           │   │                              #   Airpoints, logout, XSS/SQLi prevention
+│           │   │                              #   LoyaltyPoints, logout, XSS/SQLi prevention
 │           │   ├── api/
 │           │   │   ├── BookingAPITest.java    # 21 API tests: deserialises responses to
 │           │   │   │                          #   BookingResponse / TicketTestData; uses
@@ -184,7 +177,7 @@ airnz_automation_test/
 │           │           │                      #   fare types, cabin class, sorting, seat,
 │           │           │                      #   extras, validation, promo, manage-booking
 │           │           └── login.feature      # 16 scenarios: valid login, invalid creds,
-│           │                                  #   register, Airpoints, modal, security tags
+│           │                                  #   register, LoyaltyPoints, modal, security tags
 │           │
 │           └── resources/                     # Static test resources
 │               ├── config/
@@ -199,7 +192,7 @@ airnz_automation_test/
 │               │   │                          #   international, business, special-assistance,
 │               │   │                          #   frequent-flyer, unaccompanied minor)
 │               │   └── loginData.json         # 13 login scenarios (valid, invalid, empty,
-│               │                              #   Airpoints, registration, SQLi, XSS…)
+│               │                              #   LoyaltyPoints, registration, SQLi, XSS…)
 │               └── log4j2.xml                 # Console + rolling-file appenders; separate
 │                                              #   logs for api-requests, test-execution, errors
 │
@@ -218,8 +211,8 @@ airnz_automation_test/
 Edit `src/com/airnz/resources/config/qa.properties`:
 
 ```properties
-base.url=https://www.airnewzealand.co.nz
-api.base.url=https://api.airnewzealand.co.nz
+base.url=https://www.xxxaircompany.com
+api.base.url=https://api.xxxaircompany.com
 ```
 
 ### Selenium Configuration
@@ -237,7 +230,7 @@ explicit.wait=15
 
 Test data is stored in JSON files under `src/com/airnz/resources/testdata/`:
 
-- `loginData.json`   — 13 login scenarios (valid, invalid, empty, Airpoints, registration, SQLi, XSS)
+- `loginData.json`   — 13 login scenarios (valid, invalid, empty, LoyaltyPoints, registration, SQLi, XSS)
 - `BookingData.json` — 12 booking scenarios (domestic, international, return, multi-pax, business class, promo, API booking, check-in)
 - `TicketData.json`  — 8 passenger profiles (adult, child, infant, international, business, special-assistance, frequent-flyer, unaccompanied minor)
 
@@ -433,7 +426,7 @@ softAssert.assertAll();  // reports all failures together
 ```gherkin
 @smoke @booking-flow
 Scenario: Complete flight booking flow
-  Given I am on the Air New Zealand booking page
+  Given I am on the XXX Air Company booking page
   And I have selected a one-way trip
   When I search for a domestic flight
   And I select the first available flight
@@ -479,8 +472,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-For support, email automation-team@airnz.co.nz or create an issue in this repository.
+For support, email automation-team@xxxaircompany.com or create an issue in this repository.
 
 ---
 
-**Built with ❤️ by the AirNZ Automation Team**
+**Built with ❤️ by the XAC Automation Team**

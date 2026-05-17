@@ -9,8 +9,8 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Air New Zealand Automation Test Framework</name>
-    <description>Professional test automation framework for Air New Zealand web application</description>
+    <name>XXX Air Company Automation Test Framework</name>
+    <description>Professional test automation framework for XXX Air Company web application</description>
 
     <properties>
         <!-- Java Version -->
