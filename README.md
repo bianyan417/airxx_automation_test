@@ -1,6 +1,14 @@
-# This is a homework from Interview for Air New Zealand.
+# Air New Zealand — Automation Test Framework
 
-A professional, scalable, and maintainable test automation framework for Air New Zealand web application. This framework supports UI testing, API testing, and BDD (Behavior-Driven Development) with Cucumber.
+[![Java](https://img.shields.io/badge/java-17-blue.svg)](https://openjdk.org/projects/jdk/17/)
+[![Selenium](https://img.shields.io/badge/selenium-4.18.1-green.svg)](https://www.selenium.dev/)
+[![TestNG](https://img.shields.io/badge/testng-7.9.0-orange.svg)](https://testng.org/)
+[![Cucumber](https://img.shields.io/badge/cucumber-7.15.0-brightgreen.svg)](https://cucumber.io/)
+[![RestAssured](https://img.shields.io/badge/restassured-5.4.0-yellow.svg)](https://rest-assured.io/)
+[![Allure](https://img.shields.io/badge/allure-2.25.0-blueviolet.svg)](https://allurereport.org/)
+
+A professional, scalable, and maintainable test automation framework for the Air New Zealand web application.  
+Supports **UI** (Selenium + TestNG), **API** (RestAssured), and **BDD** (Cucumber 7) testing in one unified Maven project.
 
 ## 📋 Table of Contents
 
@@ -17,17 +25,18 @@ A professional, scalable, and maintainable test automation framework for Air New
 
 ## ✨ Features
 
-- **Multi-Browser Support**: Chrome, Firefox, Edge, Safari
-- **Page Object Model (POM)**: Clean separation of page elements and test logic
-- **API Testing**: RESTful API testing with RestAssured
-- **BDD Support**: Cucumber integration with Gherkin syntax
-- **Parallel Execution**: Run tests in parallel for faster execution
-- **Cross-Environment**: Support for QA, Staging, and Production environments
-- **Comprehensive Reporting**: Allure and Extent Reports integration
-- **Screenshot Capture**: Automatic screenshots on test failure
-- **Logging**: Detailed logging with Log4j2
-- **Data-Driven Testing**: External test data management with JSON
-- **CI/CD Ready**: Easy integration with Jenkins, GitHub Actions, etc.
+- **Multi-Browser Support**: Chrome, Firefox, Edge, Safari — configured via `selenium.properties`
+- **Page Object Model (POM)**: `BasePage` → `HomePage` / `BookingPage` / `TicketPage` / `LoginPage`
+- **API Testing**: RestAssured-backed `ApiClient`; responses deserialised to typed models (`BookingResponse`, `TicketTestData`) with `SoftAssert` attribute verification
+- **Extensible Test Data Model**: Abstract `TestData` with CRTP generic builder; `TestData.generateTestData(TestDataType, Map)` factory; `TicketTestData` as the first concrete type
+- **BDD Support**: Cucumber 7 + TestNG; `LoginSteps`, `BookingSteps`, `Hooks`; tags `@smoke`, `@regression`, `@ui`, `@api`, `@security`
+- **Parallel Execution**: TestNG `parallel="classes"` + Cucumber `@DataProvider(parallel=true)`
+- **Cross-Environment**: `qa.properties` drives base URL, credentials, feature flags; override with `-Denv=staging`
+- **Comprehensive Reporting**: Allure (steps, attachments, history) + Cucumber HTML/JSON/JUnit + rerun support
+- **Screenshot Capture**: Auto-capture on TestNG failure (`TestListener`) and Cucumber step failure (`Hooks`); attached as Base64 to Allure reports
+- **Structured Logging**: Log4j2 with separate appenders for API requests, test execution, and errors
+- **Data-Driven Testing**: JSON test data (`BookingData.json`, `TicketData.json`, `loginData.json`) loaded via `TestDataLoader`
+- **CI/CD Ready**: Maven profiles (`smoke`, `regression`, `api`, `ui`, `bdd`, `headless`) for pipeline usage
 
 ## 🏗️ Architecture
 
@@ -92,71 +101,114 @@ airnz_automation_test/
 │   └── com/
 │       └── airnz/
 │           │
-│           ├── core/                    # Framework core components
-│           │   ├── config/              # Configuration management
-│           │   │   ├── ConfigManager.java
-│           │   │   └── DriverManager.java
-│           │   ├── factory/             # Browser factory
-│           │   │   └── BrowserFactory.java
-│           │   ├── constants/           # Framework constants
+│           ├── core/                          # Framework core components
+│           │   ├── config/                    # Driver & config management
+│           │   │   ├── ConfigManager.java     # Loads qa.properties / selenium.properties;
+│           │   │   │                          #   resolves env / system-property overrides
+│           │   │   └── DriverManager.java     # Thread-local WebDriver lifecycle
+│           │   │                              #   (initDriver / getDriver / quitDriver)
+│           │   ├── factory/                   # Browser instantiation
+│           │   │   └── BrowserFactory.java    # Creates Chrome / Firefox / Edge / Safari;
+│           │   │                              #   supports local, remote & headless modes
+│           │   ├── constants/                 # Shared magic-value-free constants
 │           │   │   └── FrameworkConstants.java
-│           │   ├── listeners/           # TestNG listeners
-│           │   │   └── TestListener.java
-│           │   └── utils/               # Utility classes
-│           │       ├── WaitUtils.java
-│           │       ├── ScreenshotUtils.java
-│           │       ├── JsonUtils.java
-│           │       └── TestDataLoader.java
+│           │   ├── listeners/                 # TestNG event hooks
+│           │   │   └── TestListener.java      # Logs pass / fail / skip; auto-captures
+│           │   │                              #   screenshot on failure via ScreenshotUtils
+│           │   └── utils/                     # Reusable helpers
+│           │       ├── WaitUtils.java         # FluentWait / explicit waits wrappers
+│           │       ├── ScreenshotUtils.java   # Saves PNG; returns byte[] for Allure/Cucumber
+│           │       ├── JsonUtils.java         # Gson-backed read / write / merge helpers
+│           │       └── TestDataLoader.java    # Loads BookingData / TicketData / loginData
+│           │                                  #   JSON files into Map<String, String>
 │           │
-│           ├── pages/                   # Page Object classes
-│           │   ├── BasePage.java
-│           │   ├── HomePage.java
-│           │   ├── BookingPage.java
-│           │   ├── TicketPage.java
-│           │   └── LoginPage.java
+│           ├── pages/                         # Page Object Model classes
+│           │   ├── BasePage.java              # Abstract base: wait helpers, click, type,
+│           │   │                              #   JS executor, PageFactory init
+│           │   ├── HomePage.java              # Flight search widget, navigation, login CTA
+│           │   ├── BookingPage.java           # Flight results, fare selection, filters/sort
+│           │   ├── TicketPage.java            # Passenger form, seat map, extras, totals
+│           │   └── LoginPage.java             # Email/password form, Airpoints login,
+│           │                                  #   forgot-password, register, social login
 │           │
-│           ├── api/                     # API testing components
+│           ├── api/                           # API testing layer
 │           │   ├── client/
-│           │   │   └── ApiClient.java
+│           │   │   └── ApiClient.java         # RestAssured wrapper: GET/POST/PUT/PATCH/DELETE;
+│           │   │                              #   auth-token header, response-time util,
+│           │   │                              #   getBodyAs() deserialiser
 │           │   ├── models/
-│           │   │   ├── Ticket.java
-│           │   │   └── BookingResponse.java
+│           │   │   ├── TestData.java          # Abstract base for all test data models.
+│           │   │   │                          #   • CRTP generic Builder<T,B>
+│           │   │   │                          #   • TestDataType enum (TICKET, …)
+│           │   │   │                          #   • generateTestData(type, params) factory
+│           │   │   │                          #   • validate() / describe() contract
+│           │   │   │                          #   • toJson() / copy() utilities
+│           │   │   ├── TicketTestData.java    # Concrete TestData for flight tickets.
+│           │   │   │                          #   • All ticket fields + getters/setters
+│           │   │   │                          #   • Inner Builder extends TestData.Builder
+│           │   │   │                          #   • validate() checks 7 required fields
+│           │   │   └── BookingResponse.java   # API response model: bookingReference,
+│           │   │                              #   status, List<FlightSegment>, List<Passenger>,
+│           │   │                              #   Pricing, List<TicketTestData>, errors;
+│           │   │                              #   rich validation helpers (isConfirmed(),
+│           │   │                              #   hasValidTotalAmount(), etc.)
 │           │   └── services/
-│           │       └── BookingService.java
+│           │       └── BookingService.java    # High-level booking API calls:
+│           │                                  #   searchFlights, createBooking, getBooking,
+│           │                                  #   updateBooking, addPassenger, selectSeat,
+│           │                                  #   checkIn, cancelBooking, getBookingDetails
 │           │
-│           ├── tests/                   # Test classes
+│           ├── tests/                         # Test classes
 │           │   ├── ui/
-│           │   │   ├── BookingTest.java
-│           │   │   └── LoginTest.java
+│           │   │   ├── BookingTest.java       # 14 UI tests: search, fare selection,
+│           │   │   │                          #   multi-passenger, seat, validation, promo
+│           │   │   └── LoginTest.java         # 20 UI tests: valid/invalid login, register,
+│           │   │                              #   Airpoints, logout, XSS/SQLi prevention
 │           │   ├── api/
-│           │   │   ├── BookingAPI.java
-│           │   │   └── LoginApiTest.java
+│           │   │   ├── BookingAPITest.java    # 21 API tests: deserialises responses to
+│           │   │   │                          #   BookingResponse / TicketTestData; uses
+│           │   │   │                          #   SoftAssert for attribute-level verification
+│           │   │   └── LoginApiTest.java      # 21 API tests: auth endpoints, token flow,
+│           │   │                              #   rate-limiting, security input validation
 │           │   └── bdd/
 │           │       ├── stepdefinitions/
-│           │       │   ├── LoginSteps.java
-│           │       │   ├── BookingSteps.java
-│           │       │   └── Hooks.java
+│           │       │   ├── LoginSteps.java    # Gherkin → LoginPage method mappings
+│           │       │   ├── BookingSteps.java  # Gherkin → HomePage / BookingPage / TicketPage
+│           │       │   └── Hooks.java         # @Before / @After / @AfterStep: driver init,
+│           │       │                          #   screenshot attach, tag-based setup (@ui/@api)
 │           │       ├── runners/
-│           │       │   └── TestRunner.java
+│           │       │   └── TestRunner.java    # CucumberOptions: features, glue, Allure plugin,
+│           │       │                          #   rerun.txt; parallel DataProvider
 │           │       └── features/
-│           │           ├── Booking.feature
-│           │           └── login.feature
+│           │           ├── Booking.feature    # 17 scenarios: domestic/intl/return search,
+│           │           │                      #   fare types, cabin class, sorting, seat,
+│           │           │                      #   extras, validation, promo, manage-booking
+│           │           └── login.feature      # 16 scenarios: valid login, invalid creds,
+│           │                                  #   register, Airpoints, modal, security tags
 │           │
-│           └── resources/               # Test resources
+│           └── resources/                     # Static test resources
 │               ├── config/
-│               │   ├── qa.properties
-│               │   └── selenium.properties
+│               │   ├── qa.properties          # Base URL, API URL, credentials, timeouts,
+│               │   │                          #   retry settings, feature flags
+│               │   └── selenium.properties    # Browser, headless, window size, waits,
+│               │                              #   download dir, Grid / BrowserStack / LambdaTest
 │               ├── testdata/
-│               │   ├── BookingData.json
-│               │   ├── TicketData.json
-│               │   └── loginData.json
-│               └── log4j2.xml
+│               │   ├── BookingData.json       # 12 booking scenarios (domestic, intl, return,
+│               │   │                          #   multi-pax, business, promo, API, check-in…)
+│               │   ├── TicketData.json        # 8 passenger profiles (adult, child, infant,
+│               │   │                          #   international, business, special-assistance,
+│               │   │                          #   frequent-flyer, unaccompanied minor)
+│               │   └── loginData.json         # 13 login scenarios (valid, invalid, empty,
+│               │                              #   Airpoints, registration, SQLi, XSS…)
+│               └── log4j2.xml                 # Console + rolling-file appenders; separate
+│                                              #   logs for api-requests, test-execution, errors
 │
-├── reports/                             # Test reports output
-├── logs/                                # Log files
-├── pom.xml                              # Maven configuration
-├── testng.xml                           # TestNG suite configuration
-└── README.md                            # This file
+├── reports/                                   # Generated test reports (HTML, JSON, Allure)
+├── logs/                                      # Runtime log files
+├── pom.xml                                    # Maven: all dependencies + profile definitions
+├── testng.xml                                 # TestNG suite: parallel class execution
+├── .gitignore                                 # Ignores target/, logs/, reports/, secrets
+└── README.md                                  # This file
 ```
 
 ## ⚙️ Configuration
@@ -185,9 +237,12 @@ explicit.wait=15
 
 Test data is stored in JSON files under `src/com/airnz/resources/testdata/`:
 
-- `loginData.json` - Login test scenarios
-- `BookingData.json` - Flight booking scenarios
-- `TicketData.json` - Passenger and ticket data
+- `loginData.json`   — 13 login scenarios (valid, invalid, empty, Airpoints, registration, SQLi, XSS)
+- `BookingData.json` — 12 booking scenarios (domestic, international, return, multi-pax, business class, promo, API booking, check-in)
+- `TicketData.json`  — 8 passenger profiles (adult, child, infant, international, business, special-assistance, frequent-flyer, unaccompanied minor)
+
+Loaded at runtime via `TestDataLoader.getLoginData(scenario)`, `TestDataLoader.getBookingData(scenario)`, and `TestDataLoader.getTicketData(scenario)`.  
+Fields map directly to `SerializedName` keys used by `TestData.generateTestData()` and the concrete builders.
 
 ## 🏃 Running Tests
 
@@ -291,7 +346,7 @@ public class LoginPage extends BasePage {
     
     public LoginPage enterEmail(String email) {
         type(emailInput, email);
-        return this;
+        return this;  // fluent return
     }
 }
 ```
@@ -307,7 +362,7 @@ homePage
     .searchFlights();
 ```
 
-### Data-Driven Testing
+### Data-Driven Testing with `@DataProvider`
 
 ```java
 @DataProvider(name = "loginData")
@@ -319,15 +374,72 @@ public Object[][] loginDataProvider() {
 }
 ```
 
+### Test Data — Direct Builder
+
+Use `TicketTestData.builder()` when all fields are known at compile time:
+
+```java
+TicketTestData ticket = TicketTestData.builder()
+    .ticketNumber("086-1234567890")
+    .bookingReference("ABC123")
+    .passengerTitle("Mr")
+    .passengerFirstName("John")
+    .passengerLastName("Smith")
+    .flightNumber("NZ101")
+    .origin("AKL")
+    .destination("WLG")
+    .cabinClass("Economy")
+    .price(199.00)
+    .currency("NZD")
+    .buildAndValidate();  // throws if required fields missing
+```
+
+### Test Data — Factory Method (runtime / JSON-driven)
+
+Use `TestData.generateTestData()` when the type or values come from a JSON file:
+
+```java
+// Load scenario from TicketData.json
+Map<String, String> params = TestDataLoader.getTicketData("adultPassenger");
+TicketTestData ticket = TestData.generateTestData(TestData.TestDataType.TICKET, params);
+```
+
+### Adding a New Test Data Type
+
+1. Create `PassengerTestData extends TestData` with its own inner `Builder`
+2. Add `PASSENGER` to `TestData.TestDataType`
+3. Add one line to the static registry in `TestData`:
+```java
+registry.put(TestDataType.PASSENGER, TestData::buildPassengerTestData);
+```
+
+### API Response Assertion with `SoftAssert`
+
+Deserialise the raw `Response` to a typed model then verify every attribute in one block:
+
+```java
+BookingResponse booking = ApiClient.getBodyAs(response, BookingResponse.class);
+
+SoftAssert softAssert = new SoftAssert();
+softAssert.assertNotNull(booking, "BookingResponse should not be null");
+softAssert.assertEquals(booking.getBookingReference(), expectedRef, "Ref should match");
+softAssert.assertTrue(booking.hasValidTotalAmount(), "Total should be > 0");
+softAssert.assertFalse(booking.hasErrors(), "No errors expected");
+softAssert.assertAll();  // reports all failures together
+```
+
 ### BDD Scenarios
 
 ```gherkin
-@smoke
-Scenario: Successful login with valid credentials
-  Given I am on the login page
-  When I enter valid login credentials
-  And I click the login button
-  Then I should be logged in successfully
+@smoke @booking-flow
+Scenario: Complete flight booking flow
+  Given I am on the Air New Zealand booking page
+  And I have selected a one-way trip
+  When I search for a domestic flight
+  And I select the first available flight
+  And I select the "Seat + Bag" fare
+  And I continue to passenger details
+  Then I should be on the passenger details page
 ```
 
 ## 🔧 IDE Setup
