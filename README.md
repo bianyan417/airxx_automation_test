@@ -92,7 +92,7 @@ airnz_automation_test/
 │
 ├── src/
 │   └── com/
-│       └── airnz/
+│       └── airxx/
 │           │
 │           ├── core/                          # Framework core components
 │           │   ├── config/                    # Driver & config management
