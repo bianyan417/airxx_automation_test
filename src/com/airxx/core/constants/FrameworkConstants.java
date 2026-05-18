@@ -19,7 +19,7 @@ public final class FrameworkConstants {
     public static final String PROJECT_PATH = System.getProperty("user.dir");
     
     /** Source resources path */
-    public static final String RESOURCES_PATH = PROJECT_PATH + "/src/com/airnz/resources/";
+    public static final String RESOURCES_PATH = PROJECT_PATH + "/src/com/airxx/resources/";
     
     /** Configuration files path */
     public static final String CONFIG_PATH = RESOURCES_PATH + "config/";
@@ -37,7 +37,7 @@ public final class FrameworkConstants {
     public static final String LOGS_PATH = PROJECT_PATH + "/logs/";
     
     /** Feature files path for BDD */
-    public static final String FEATURES_PATH = PROJECT_PATH + "/src/com/airnz/tests/bdd/features/";
+    public static final String FEATURES_PATH = PROJECT_PATH + "/src/com/airxx/tests/bdd/features/";
     
     // ===================== TIMEOUTS =====================
     

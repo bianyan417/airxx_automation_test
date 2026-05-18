@@ -20,8 +20,8 @@ public class HomePage extends BasePage {
     // ===================== PAGE ELEMENTS =====================
     
     // Header Elements
-    @FindBy(css = "[data-testid='airnz-logo']")
-    private WebElement airNzLogo;
+    @FindBy(css = "[data-testid='airxx-logo']")
+    private WebElement airxxLogo;
     
     @FindBy(css = "[data-testid='login-button'], .login-btn, a[href*='login']")
     private WebElement loginButton;
@@ -405,7 +405,7 @@ public class HomePage extends BasePage {
     public boolean isPageLoaded() {
         try {
             waitForPageLoad();
-            return isDisplayed(By.cssSelector("[data-testid='airnz-logo']")) || 
+            return isDisplayed(By.cssSelector("[data-testid='airxx-logo']")) || 
                    isDisplayed(By.cssSelector("[data-testid='search-flights-btn']")) ||
                    getPageTitle().toLowerCase().contains("air new zealand");
         } catch (Exception e) {

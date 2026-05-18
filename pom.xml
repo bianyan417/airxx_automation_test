@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.airnz</groupId>
-    <artifactId>airnz-automation-test</artifactId>
+    <groupId>com.airxx</groupId>
+    <artifactId>airxx-automation-test</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
@@ -172,7 +172,7 @@
         <sourceDirectory>src</sourceDirectory>
         <resources>
             <resource>
-                <directory>src/com/airnz/resources</directory>
+                <directory>src/com/airxx/resources</directory>
             </resource>
         </resources>
 

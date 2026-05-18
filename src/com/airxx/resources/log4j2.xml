@@ -14,8 +14,8 @@
         
         <!-- Rolling File Appender for all logs -->
         <RollingFile name="RollingFile" 
-                     fileName="${LOG_DIR}/airnz-automation.log"
-                     filePattern="${LOG_DIR}/airnz-automation-%d{yyyy-MM-dd}-%i.log.gz">
+                     fileName="${LOG_DIR}/airxx-automation.log"
+                     filePattern="${LOG_DIR}/airxx-automation-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
@@ -26,8 +26,8 @@
         
         <!-- Separate file for error logs -->
         <RollingFile name="ErrorFile" 
-                     fileName="${LOG_DIR}/airnz-errors.log"
-                     filePattern="${LOG_DIR}/airnz-errors-%d{yyyy-MM-dd}-%i.log.gz">
+                     fileName="${LOG_DIR}/airxx-errors.log"
+                     filePattern="${LOG_DIR}/airxx-errors-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="${LOG_PATTERN}"/>
             <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <Policies>
@@ -64,28 +64,28 @@
     
     <Loggers>
         <!-- Framework specific loggers -->
-        <Logger name="com.airnz" level="DEBUG" additivity="false">
+        <Logger name="com.airxx" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
             <AppenderRef ref="ErrorFile"/>
         </Logger>
         
         <!-- Test execution logger -->
-        <Logger name="com.airnz.tests" level="INFO" additivity="false">
+        <Logger name="com.airxx.tests" level="INFO" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="TestExecutionFile"/>
             <AppenderRef ref="ErrorFile"/>
         </Logger>
         
         <!-- API client logger -->
-        <Logger name="com.airnz.api" level="DEBUG" additivity="false">
+        <Logger name="com.airxx.api" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="ApiFile"/>
             <AppenderRef ref="ErrorFile"/>
         </Logger>
         
         <!-- Page objects logger -->
-        <Logger name="com.airnz.pages" level="DEBUG" additivity="false">
+        <Logger name="com.airxx.pages" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="RollingFile"/>
         </Logger>

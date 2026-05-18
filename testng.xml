@@ -2,7 +2,7 @@
 <suite name="XAC Automation Test Suite" parallel="classes" thread-count="3">
     
     <listeners>
-        <listener class-name="com.airnz.core.listeners.TestListener"/>
+        <listener class-name="com.airxx.core.listeners.TestListener"/>
     </listeners>
     
     <!-- Smoke Tests -->
@@ -13,30 +13,30 @@
             </run>
         </groups>
         <packages>
-            <package name="com.airnz.tests.*"/>
+            <package name="com.airxx.tests.*"/>
         </packages>
     </test>
     
     <!-- UI Tests -->
     <test name="UI Tests">
         <classes>
-            <class name="com.airnz.tests.ui.LoginTest"/>
-            <class name="com.airnz.tests.ui.BookingTest"/>
+            <class name="com.airxx.tests.ui.LoginTest"/>
+            <class name="com.airxx.tests.ui.BookingTest"/>
         </classes>
     </test>
     
     <!-- API Tests -->
     <test name="API Tests">
         <classes>
-            <class name="com.airnz.tests.api.LoginApiTest"/>
-            <class name="com.airnz.tests.api.BookingAPI"/>
+            <class name="com.airxx.tests.api.LoginApiTest"/>
+            <class name="com.airxx.tests.api.BookingAPI"/>
         </classes>
     </test>
     
     <!-- BDD Tests -->
     <test name="BDD Tests">
         <classes>
-            <class name="com.airnz.tests.bdd.runners.TestRunner"/>
+            <class name="com.airxx.tests.bdd.runners.TestRunner"/>
         </classes>
     </test>
     

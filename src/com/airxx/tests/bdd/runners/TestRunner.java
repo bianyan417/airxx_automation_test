@@ -12,8 +12,8 @@ import org.testng.annotations.DataProvider;
  * @version 1.0
  */
 @CucumberOptions(
-    features = "src/com/airnz/tests/bdd/features",
-    glue = {"com.airnz.tests.bdd.stepdefinitions"},
+    features = "src/com/airxx/tests/bdd/features",
+    glue = {"com.airxx.tests.bdd.stepdefinitions"},
     plugin = {
         "pretty",
         "html:reports/cucumber-reports/cucumber-html-report.html",
