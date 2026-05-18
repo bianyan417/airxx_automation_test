@@ -88,7 +88,7 @@ mvn test -Dtest=LoginTest#testLoginPageLoads
 ## 📁 Project Structure
 
 ```
-airnz_automation_test/
+airxx_automation_test/
 │
 ├── src/
 │   └── com/
@@ -228,7 +228,7 @@ explicit.wait=15
 
 ### Test Data
 
-Test data is stored in JSON files under `src/com/airnz/resources/testdata/`:
+Test data is stored in JSON files under `src/com/airxx/resources/testdata/`:
 
 - `loginData.json`   — 13 login scenarios (valid, invalid, empty, LoyaltyPoints, registration, SQLi, XSS)
 - `BookingData.json` — 12 booking scenarios (domestic, international, return, multi-pax, business class, promo, API booking, check-in)
