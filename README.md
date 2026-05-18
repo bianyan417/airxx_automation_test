@@ -208,7 +208,7 @@ airnz_automation_test/
 
 ### Environment Configuration
 
-Edit `src/com/airnz/resources/config/qa.properties`:
+Edit `src/com/airxx/resources/config/qa.properties`:
 
 ```properties
 base.url=https://www.xxxaircompany.com
@@ -217,7 +217,7 @@ api.base.url=https://api.xxxaircompany.com
 
 ### Selenium Configuration
 
-Edit `src/com/airnz/resources/config/selenium.properties`:
+Edit `src/com/airxx/resources/config/selenium.properties`:
 
 ```properties
 browser=chrome
